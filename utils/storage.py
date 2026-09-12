@@ -1,8 +1,9 @@
-"""JSON persistence layer. Owner: YOU."""
+"""JSON persistence layer. Owner: Vincent Kulankash."""
 import json
 import os
 
-
+#json for reading/writing JSON
+#os for path joining and filename existence checks
 class Storage:
     """Read/write lists of objects as JSON files."""
 
@@ -10,23 +11,29 @@ class Storage:
         self.data_dir = data_dir
         os.makedirs(data_dir, exist_ok=True)
 
+    #This checks if we have the folder data where we will use it to save our filename and json objects
+
     def _path(self, filename: str) -> str:
+        """Full path to a file inside the data folder"""
         return os.path.join(self.data_dir, filename)
 
     def save(self, filename: str, items: list) -> None:
-        """Persist list of objects (each with .to_dict()) to JSON."""
-        # TODO (YOU)
+        """Save a list of model objects to a json file"""
+
         with open(self._path(filename), "w") as f:
-            json.dump([i.to_dict() for i in items], f, indent=2)
+            json.dump([item.to_dict() for item in items], f, indent=2)
+    #with open(self._path(filename)) opens the full filepath data/users.json and then 
+    #no return this is used only to write 
 
     def load(self, filename: str, model_cls) -> list:
-        """Load list of objects using model_cls.from_dict()."""
-        # TODO (YOU): handle missing file + corrupt JSON
+        """Load a json file and reconstruct objects via model_cls.from_dict()"""
+        
         path = self._path(filename)
         if not os.path.exists(path):
             return []
         try:
             with open(path) as f:
                 return [model_cls.from_dict(d) for d in json.load(f)]
-        except (json.JSONDecodeError, KeyError, TypeError):
+        except (json.JSONDecodeError, KeyError, TypeError) as e:
+            print (f"Could not load {filename}: {e}")
             return []
