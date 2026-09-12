@@ -6,16 +6,16 @@ console = Console()
 
 
 def print_table(title: str, headers: list, rows: list) -> None:
-    """Print a rich table.
-    headers: ['ID', 'Name', ...]
-    rows:    [[1, 'Alice'], ...]
+    """Print a rich formatted table.
+    headers: list of column titles  ['ID', 'Name', ...]
+    rows: list of row data [[1, 'Alice'], ...]
     """
-    # TODO (YOU)
+    
     table = Table(title=title)
     for h in headers:
         table.add_column(str(h))
     for r in rows:
-        table.add_row(*[str(c) for c in r])
+        table.add_row(*[str(c) for c in r]) # * this unpacks the list into separate arguments
     console.print(table)
 
 
@@ -29,5 +29,8 @@ def error(msg: str) -> None:
 
 def ask(prompt: str) -> str:
     """Prompt and return stripped input."""
-    # TODO (YOU)
     return input(prompt).strip()
+
+success('This works')
+error('This is an error')
+print_table('Sample users', ['id', 'Name', 'Email'], [[1, 'Alice', 'alice@x.com'], [2, 'Alicia', 'alice@xds.com'], [3, 'Mike', 'mike@x.com']],)
