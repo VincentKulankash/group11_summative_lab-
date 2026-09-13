@@ -61,3 +61,6 @@ def test_login_required_allows_when_logged_in():
         return "ran"
 
     assert secret() == "ran"
+
+
+##All tests pass 
