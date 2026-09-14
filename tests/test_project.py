@@ -141,8 +141,7 @@ def test_from_dict():
 
 def test_string_representation():
     project = Project("RPG Game", "Description", "2026-10-01", 1)
-
-    assert str(project) == f"Project #{project.id}: RPG Game"
+    assert str(project) == f"Project #{project.id} [medium]: RPG Game"
 
 
 def test_repr():
@@ -152,3 +151,18 @@ def test_repr():
 
     assert "Project(" in result
     assert "RPG Game" in result
+
+def test_default_difficulty():
+    project = Project("RPG Game", "Desc", "2026-10-01", 1)
+    assert project.difficulty == "medium"
+
+
+def test_custom_difficulty():
+    project = Project("RPG Game", "Desc", "2026-10-01", 1, "legendary")
+    assert project.difficulty == "legendary"
+
+
+def test_invalid_difficulty_raises():
+    import pytest
+    with pytest.raises(ValueError):
+        Project("RPG Game", "Desc", "2026-10-01", 1, "impossible")

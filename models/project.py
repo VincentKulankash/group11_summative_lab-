@@ -1,19 +1,25 @@
 """Project class. Owner: TEAMMATE 3."""
 
 
+VALID_DIFFICULTIES = {"easy", "medium", "hard", "legendary"}
+
+
 class Project:
     """A project owned by a user. Holds tasks."""
 
     _id_counter = 0
 
-    def __init__(self, title, description, due_date, owner_id, project_id=None):
-        # TO DO (team member ): assign id, store fields, initialize self._task_ids = []
+    def __init__(self, title, description, due_date, owner_id,
+                 difficulty="medium", project_id=None):
         Project._id_counter += 1
         self._id = project_id if project_id is not None else Project._id_counter
         self._title = title
         self._description = description
         self._due_date = due_date
         self._owner_id = owner_id
+        if difficulty not in VALID_DIFFICULTIES:
+            raise ValueError(f"Invalid difficulty: {difficulty}")
+        self._difficulty = difficulty
         self._task_ids = []
 
     @property
@@ -53,18 +59,24 @@ class Project:
         self._due_date = value.strip()
 
     @property
+    def difficulty(self):
+        return self._difficulty
+
+    @difficulty.setter
+    def difficulty(self, value):
+        if value not in VALID_DIFFICULTIES:
+            raise ValueError(f"Invalid difficulty: {value}")
+        self._difficulty = value
+
+    @property
     def task_ids(self) -> list:
-        # TO DO (team member): return a copy
         return self._task_ids.copy()
 
     def add_task(self, tid: int):
-        # TO DO (team member)
         if not isinstance(tid, int):
             raise TypeError("Task ID must be an integer.")
-
         if tid in self._task_ids:
             return False
-
         self._task_ids.append(tid)
         return True
 
@@ -73,7 +85,6 @@ class Project:
         if tid in self._task_ids:
             self._task_ids.remove(tid)
             return True
-
         return False
 
     def has_task(self, tid: int) -> bool:
@@ -89,35 +100,33 @@ class Project:
         self._task_ids.clear()
 
     def to_dict(self) -> dict:
-        # TO DO (team member)
         return {
             "id": self._id,
             "title": self._title,
             "description": self._description,
             "due_date": self._due_date,
             "owner_id": self._owner_id,
+            "difficulty": self._difficulty,
             "task_ids": self._task_ids.copy(),
         }
 
     @classmethod
     def from_dict(cls, d: dict) -> "Project":
-        # TO DO (team member)
         if not isinstance(d, dict):
             raise TypeError("Project data must be a dictionary.")
 
         required_fields = ["id", "title", "owner_id"]
-
         for field in required_fields:
             if field not in d:
                 raise ValueError(f"Missing project field: {field}")
 
         project = cls.__new__(cls)
-
         project._id = d["id"]
         project._title = d["title"]
         project._description = d.get("description", "")
         project._due_date = d.get("due_date", "")
         project._owner_id = d["owner_id"]
+        project._difficulty = d.get("difficulty", "medium")
         project._task_ids = list(d.get("task_ids", []))
 
         if project._id > cls._id_counter:
@@ -126,7 +135,7 @@ class Project:
         return project
 
     def __str__(self):
-        return f"Project #{self._id}: {self._title}"
+        return f"Project #{self._id} [{self._difficulty}]: {self._title}"
 
     def __repr__(self):
         return (
