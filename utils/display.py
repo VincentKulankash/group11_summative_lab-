@@ -30,7 +30,3 @@ def error(msg: str) -> None:
 def ask(prompt: str) -> str:
     """Prompt and return stripped input."""
     return input(prompt).strip()
-
-success('This works')
-error('This is an error')
-print_table('Sample users', ['id', 'Name', 'Email'], [[1, 'Alice', 'alice@x.com'], [2, 'Alicia', 'alice@xds.com'], [3, 'Mike', 'mike@x.com']],)
