@@ -48,6 +48,9 @@ class Task:
         """Mark the task as done"""
         self._status = 'done'
 
+    def assign_to(self, user_id):
+        self._assigned_to = user_id
+
     def to_dict(self):
         return {
             'id': self._id,
