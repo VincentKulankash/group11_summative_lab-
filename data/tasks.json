@@ -1,1 +1,23 @@
-[]
+[
+    {
+        "id": 1,
+        "title": "Defeat the dragon",
+        "status": "Todo",
+        "assigned_user": "Hero",
+        "project": "RPG Battle Simulator"
+    },
+    {
+        "id": 2,
+        "title": "Collect the magic sword",
+        "status": "in-progress",
+        "assigned_user": "Warrior",
+        "project": "RPG Battle Simulator"
+    },
+    {
+        "id": 3,
+        "title": "Rescue the village",
+        "status": "done",
+        "assigned_user": "Mage",
+        "project": "RPG Battle Simulator"
+    }
+]

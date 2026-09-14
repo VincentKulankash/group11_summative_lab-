@@ -143,3 +143,4 @@ class Project:
             f"title='{self._title}', "
             f"owner_id={self._owner_id})"
         )
+
