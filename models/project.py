@@ -24,6 +24,20 @@ class Project:
     def title(self):
         return self._title
 
+    @title.setter
+    def title(self, value):
+        if not value or not value.strip():
+            raise ValueError("Project title cannot be empty.")
+        self._title = value.strip()
+
+    @property
+    def description(self):
+        return self._description
+
+    @description.setter
+    def description(self, value):
+        self._description = value
+
     @property
     def owner_id(self):
         return self._owner_id
@@ -32,14 +46,47 @@ class Project:
     def due_date(self):
         return self._due_date
 
+    @due_date.setter
+    def due_date(self, value):
+        if not value or not value.strip():
+            raise ValueError("Due date cannot be empty.")
+        self._due_date = value.strip()
+
     @property
     def task_ids(self) -> list:
         # TO DO (team member): return a copy
-        return list(self._task_ids)
+        return self._task_ids.copy()
 
     def add_task(self, tid: int):
         # TO DO (team member)
+        if not isinstance(tid, int):
+            raise TypeError("Task ID must be an integer.")
+
+        if tid in self._task_ids:
+            return False
+
         self._task_ids.append(tid)
+        return True
+
+    def remove_task(self, tid: int):
+        """Remove a task from the project."""
+        if tid in self._task_ids:
+            self._task_ids.remove(tid)
+            return True
+
+        return False
+
+    def has_task(self, tid: int) -> bool:
+        """Check whether a task belongs to this project."""
+        return tid in self._task_ids
+
+    def task_count(self) -> int:
+        """Return the number of tasks in the project."""
+        return len(self._task_ids)
+
+    def clear_tasks(self):
+        """Remove all tasks from the project."""
+        self._task_ids.clear()
 
     def to_dict(self) -> dict:
         # TO DO (team member)
@@ -49,20 +96,41 @@ class Project:
             "description": self._description,
             "due_date": self._due_date,
             "owner_id": self._owner_id,
-            "task_ids": self._task_ids,
+            "task_ids": self._task_ids.copy(),
         }
 
     @classmethod
     def from_dict(cls, d: dict) -> "Project":
         # TO DO (team member)
-        p = cls.__new__(cls)
-        p._id = d["id"]
-        p._title = d["title"]
-        p._description = d.get("description", "")
-        p._due_date = d.get("due_date", "")
-        p._owner_id = d["owner_id"]
-        p._task_ids = d.get("task_ids", [])
-        return p
+        if not isinstance(d, dict):
+            raise TypeError("Project data must be a dictionary.")
+
+        required_fields = ["id", "title", "owner_id"]
+
+        for field in required_fields:
+            if field not in d:
+                raise ValueError(f"Missing project field: {field}")
+
+        project = cls.__new__(cls)
+
+        project._id = d["id"]
+        project._title = d["title"]
+        project._description = d.get("description", "")
+        project._due_date = d.get("due_date", "")
+        project._owner_id = d["owner_id"]
+        project._task_ids = list(d.get("task_ids", []))
+
+        if project._id > cls._id_counter:
+            cls._id_counter = project._id
+
+        return project
 
     def __str__(self):
         return f"Project #{self._id}: {self._title}"
+
+    def __repr__(self):
+        return (
+            f"Project(id={self._id}, "
+            f"title='{self._title}', "
+            f"owner_id={self._owner_id})"
+        )
