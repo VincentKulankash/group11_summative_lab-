@@ -37,3 +37,5 @@ class Storage:
         except (json.JSONDecodeError, KeyError, TypeError) as e:
             print (f"Could not load {filename}: {e}")
             return []
+
+#this file is polymorphic it accepts any list of obkects and calls .to_dict() on each

@@ -46,4 +46,4 @@ class Person(ABC):
     def __str__(self):
         return f"[{self.role()}] {self.name} <{self.email}>"
 
-#this is complete 
+#this is complete we used encapsulation hiding internal state with a leading underscore data behind controlled access using @property you cant set person.name= "" the setter rejects it 
